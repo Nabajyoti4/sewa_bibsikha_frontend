@@ -1,0 +1,41 @@
+---
+description: React component patterns and conventions
+globs: "**/*.jsx"
+alwaysApply: false
+---
+
+# React Component Patterns
+
+## Component Structure
+
+- Use **functional components** with arrow functions and `default export`
+- Use **destructured props** with default values where needed
+- Wrap page components in `DashboardLayout` with the correct `activeSection` prop
+- Route-level components are **lazy-loaded** via `React.lazy()` in route files
+
+```jsx
+const MyComponent = ({ label, required = false, ...props }) => {
+  return (/* JSX */);
+};
+
+export default MyComponent;
+```
+
+## State Management
+
+- **No global store** (no Redux/Zustand) — state is local or passed via props
+- Use `FeedbackProvider` context for feedback modal access (`useFeedback` hook)
+- Auth state lives in `localStorage` (`authToken`, `user`, `loginTimestamp`)
+- Session events use `window.dispatchEvent(new Event('auth-changed'))` pattern
+
+## Routing
+
+- Use `useNavigate` for programmatic navigation
+- Pass form data between pages via `location.state` (e.g. navigate to review page with `formData`)
+- Protected routes use `<ProtectedRoute>`, public-only pages use `<PublicOnlyRoute>`
+
+## Styling
+
+- Use plain **CSS classes** (e.g. `className="form-group"`, `"page-title"`)
+- Inline styles via `style={{}}` for one-off layout adjustments
+- CSS custom properties for theming (e.g. `var(--error)`, `var(--primary)`)

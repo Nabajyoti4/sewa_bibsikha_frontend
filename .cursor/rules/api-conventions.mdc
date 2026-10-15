@@ -1,0 +1,43 @@
+---
+description: API service layer and Axios conventions
+globs: "src/services/**"
+alwaysApply: false
+---
+
+# API Conventions
+
+## Architecture
+
+- `src/services/apiHelpers.js` — shared Axios instance (`apiClient`), interceptors, auth helpers
+- `src/services/advocateApiService.js` — advocate-specific API calls
+- `src/services/adminApiService.js` — admin-specific API calls
+- `src/services/apiService.js` — general API calls (health check, etc.)
+
+## Axios Instance
+
+A single `apiClient` created with `axios.create()`:
+- `baseURL` from `import.meta.env.VITE_API_BASE_URL`
+- Auto-attaches JWT from `localStorage.getItem('authToken')` via request interceptor
+- Auto-removes `Content-Type` header for `FormData` requests (lets browser set boundary)
+- Response interceptor handles 401/403 by clearing auth and dispatching `session-expired` event
+
+## Writing API Functions
+
+Follow the existing pattern — each function is a named export:
+
+```js
+export async function myApiCall(payload) {
+  try {
+    const response = await apiClient.post("/my-endpoint", payload);
+    return response.data?.data ?? response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+}
+```
+
+Key conventions:
+- Always wrap in try/catch and use `handleApiError(error)` for consistent error formatting
+- Normalize responses with `response.data?.data ?? response.data`
+- For file uploads, use `FormData` — the interceptor handles header cleanup
+- Use `getCurrentUser()` when the endpoint needs the current user's ID

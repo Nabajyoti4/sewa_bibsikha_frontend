@@ -1,0 +1,63 @@
+---
+description: Form handling patterns with React Hook Form and Yup
+globs: "**/*.jsx"
+alwaysApply: false
+---
+
+# Form Patterns
+
+## React Hook Form + Yup
+
+All document forms follow this pattern:
+
+1. **Schema** in `layouts/advocate/schema/` defines Yup validation
+2. **Form component** uses `useForm` with `yupResolver`
+3. **Stage components** render grouped form sections, receiving `watch`, `setValue`, `errors`
+4. On submit, navigate to a review page with form data in `location.state`
+
+```jsx
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { mySchema } from "../../../schema/mySchema";
+
+const MyForm = () => {
+  const { handleSubmit, control, watch, setValue, formState: { errors, isSubmitting } } = useForm({
+    resolver: yupResolver(mySchema),
+    defaultValues: { /* ... */ },
+    mode: "onBlur",
+  });
+
+  const onSubmit = (values) => {
+    navigate("/advocate/review-document", {
+      state: { formData: values, agreementType: "myType" },
+    });
+  };
+
+  return (
+    <DashboardLayout activeSection="agreements">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <MyStage watch={watch} setValue={setValue} errors={errors} />
+        {/* more stages ... */}
+      </form>
+    </DashboardLayout>
+  );
+};
+```
+
+## Stage Components
+
+Each form is split into stage components (grouped field sections). Stages receive:
+- `watch` — read field values
+- `setValue` — update field values
+- `errors` — validation errors object
+- Additional props like `districtOptions` as needed
+
+## Yup Schemas
+
+- Define in `.jsx` files under `layouts/advocate/schema/`
+- Use a `requiredString` helper: `const requiredString = (label) => yup.string().trim().required(\`\${label} is required\`)`
+- Optional fields use `yup.string().trim()` without `.required()`
+
+## Client Prefill
+
+Forms support prefilling from existing client data using `ClientPrefillPicker` and mapper functions in `utils/clientPrefillMappers.js` and `utils/clientAgreementPrefillMapper.js`.

@@ -1,0 +1,34 @@
+# Project Rules
+
+## General
+
+- Always follow the existing project patterns, architecture, and design.
+- Reuse existing patterns and conventions instead of introducing new ones.
+- Do not invent names, structures, or patterns when an existing convention is available.
+- Always ask if you have any doubt about a new feature or task. Never assume.
+
+## Scope Control
+
+- Only implement what is explicitly requested.
+- Do not assume additional requirements or add related functionality.
+- Do not modify unrelated files, features, or business logic.
+- Make the minimum changes necessary to complete the task.
+- Do not refactor or improve existing code unless it is required for the requested task.
+
+## Change Approval
+
+- If an additional change is necessary, always consult with me before making it.
+- Before making an additional change, explain:
+  - Why it is needed.
+  - What it changes.
+  - What benefit it provides.
+- If there is any doubt whether a change is required, ask first.
+
+## Recommendations
+
+- If you identify a better approach, recommend it before changing the implementation.
+- Clearly distinguish between:
+  - Required change
+  - Recommended improvement
+  - Optional improvement
+- A recommendation is not permission to change the code.

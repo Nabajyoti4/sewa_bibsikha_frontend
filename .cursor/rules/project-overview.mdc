@@ -1,0 +1,55 @@
+---
+description: Kaziranga AI frontend project overview and architecture
+alwaysApply: true
+---
+
+# Kaziranga AI Frontend
+
+Legal document generation platform for advocates in Assam, India. Built for creating agreements, affidavits, and deeds.
+
+# React Frontend Rules
+
+## React Version
+
+- Check the installed `react` and `react-dom` versions in `package.json` before making React-related decisions.
+- Follow best practices appropriate for the project's installed React version.
+- Do not use APIs or patterns from newer React versions unless the project supports them.
+- If the project uses React 18, follow React 18 patterns and recommendations.
+- If unsure whether a practice is appropriate for the installed version, verify it before implementing it.
+
+## React Best Practices
+
+- Prefer official React patterns and established project patterns.
+- Prefer simple and maintainable solutions over unnecessary abstractions.
+- If multiple valid approaches exist, recommend the best-practice approach and briefly explain why.
+- If the requested implementation conflicts with a React best practice, tell me before implementing it.
+- Do not introduce React improvements outside the requested scope without consulting me.
+
+## Existing Frontend Patterns
+
+- Follow the existing component structure and naming conventions.
+- Reuse existing components, hooks, utilities, and patterns when appropriate.
+- Do not create a new abstraction when an existing project abstraction can be reused.
+- Do not change existing frontend architecture unless required for the requested task.
+
+## Tech Stack
+
+- **React 18** with Vite (ES modules)
+- **React Router v6** for routing (lazy-loaded routes with `Suspense`)
+- **React Hook Form** + **Yup** for form handling and validation
+- **Axios** for API calls (shared instance in `src/services/apiHelpers.js`)
+- **SweetAlert2** for alerts/modals
+- **CSS** (plain CSS, no Tailwind/CSS-in-JS) with CSS custom properties (e.g. `var(--error)`)
+
+## Environment Variables
+
+All env vars use the `VITE_` prefix (Vite convention):
+- `VITE_API_BASE_URL` — backend API base URL
+- `VITE_S3_BASE_URL` — S3 media base URL
+
+## User Roles
+
+Three distinct layouts under `src/layouts/`:
+- `advocate` — primary users (document generation, client management)
+- `admin` — admin dashboard (advocate management, requests)
+- `user` — public-facing pages (FAQ, privacy, compliance)
