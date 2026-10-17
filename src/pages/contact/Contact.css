@@ -228,6 +228,15 @@ a.contact-channel:hover {
   margin-top: 6px;
 }
 
+.contact-form__error {
+  padding: 12px 16px;
+  border: 1px solid #f1c4bf;
+  border-radius: 14px;
+  background: #fdf3f2;
+  color: var(--error);
+  font-size: 14px;
+}
+
 .contact-form__submit:disabled {
   opacity: 0.7;
   cursor: progress;

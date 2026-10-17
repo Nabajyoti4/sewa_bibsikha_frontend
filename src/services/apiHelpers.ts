@@ -1,4 +1,4 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8001/api/v1").replace(/\/$/, "");
 
 const AUTH_TOKEN_KEY = "authToken";
 const USER_KEY = "user";
@@ -13,6 +13,99 @@ export interface AuthUser {
   userType: string;
   status: string;
   createdAt: string;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export interface PaginationMeta {
+  totalCount: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedResponse<T> {
+  success: boolean;
+  message: string;
+  data: T[];
+  pagination: PaginationMeta;
+}
+
+export type ContactStatusValue = "new" | "in_progress" | "resolved" | "spam";
+
+export interface ContactSubmissionPayload {
+  name: string;
+  organisation: string;
+  email: string;
+  phone: string;
+  sector: string;
+  service: string;
+  message: string;
+  consent: boolean;
+}
+
+export interface ContactSubmissionReceipt {
+  id: string;
+  createdAt: string;
+}
+
+export interface ContactSubmissionApiItem extends ContactSubmissionPayload, ContactSubmissionReceipt {
+  status: ContactStatusValue;
+  updatedAt: string;
+}
+
+export interface ContactSubmissionListResponse extends PaginatedResponse<ContactSubmissionApiItem> {
+  statusCounts: Record<ContactStatusValue, number>;
+}
+
+export type ProjectStatusValue = "ongoing" | "completed";
+export type ProjectVisibilityValue = "active" | "inactive";
+
+export interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
+export interface ProjectApiItem {
+  id: string;
+  title: string;
+  location: string;
+  category: string;
+  status: ProjectStatusValue;
+  summary: string;
+  metrics: ProjectMetric[];
+  imageUrl: string;
+  visibility: ProjectVisibilityValue;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HeroSlideImage {
+  id: string;
+  imageUrl: string;
+}
+
+export interface HeroSlideApiItem {
+  id: string;
+  title: string;
+  caption: string;
+  tag: string;
+  images: HeroSlideImage[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export function toQueryString(params: Record<string, string | number | null | undefined>): string {
+  const search = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== "") search.set(key, String(value));
+  });
+  const query = search.toString();
+  return query ? `?${query}` : "";
 }
 
 export interface ApiFieldError {

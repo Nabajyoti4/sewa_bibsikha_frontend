@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { personas, services } from "../../../data/siteContent";
 
 const requiredString = (label: string) => yup.string().trim().required(`${label} is required`);
 
@@ -11,8 +12,11 @@ export const contactSchema = yup.object({
     .trim()
     .default("")
     .matches(/^$|^[+]?[\d\s-]{8,15}$/, "Enter a valid phone number"),
-  sector: requiredString("Sector"),
-  service: requiredString("Service of interest"),
+  sector: requiredString("Sector").oneOf(
+    [...personas.filter((item) => item.id !== "explorer").map((item) => item.id), "other"],
+    "Select a valid sector",
+  ),
+  service: requiredString("Service of interest").oneOf([...services.map((item) => item.id), "other"], "Select a valid service"),
   message: requiredString("Message").min(20, "Please share a little more detail (at least 20 characters)"),
   consent: yup.boolean().default(false).oneOf([true], "Please accept to continue"),
 });

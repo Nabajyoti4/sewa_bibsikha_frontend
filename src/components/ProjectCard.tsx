@@ -18,17 +18,23 @@ const ProjectCard = ({ project, featured = false }: ProjectCardProps) => {
   return (
     <TiltCard className={`project-card ${featured ? "project-card--featured" : ""}`} max={5}>
       <div className="project-card__visual" style={visualStyle}>
-        <svg className="project-card__topo" viewBox="0 0 400 240" preserveAspectRatio="none" aria-hidden="true">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <path
-              key={i}
-              d={`M-20 ${60 + i * 26} C 80 ${20 + i * 30}, 160 ${110 + i * 22}, 240 ${60 + i * 26} S 380 ${30 + i * 28}, 440 ${80 + i * 22}`}
-            />
-          ))}
-        </svg>
-        <span className="project-card__icon">
-          <Icon name={project.icon} size={featured ? 56 : 40} strokeWidth={1.4} />
-        </span>
+        {project.image ? (
+          <img className="project-card__image" src={project.image} alt={project.title} loading="lazy" />
+        ) : (
+          <>
+            <svg className="project-card__topo" viewBox="0 0 400 240" preserveAspectRatio="none" aria-hidden="true">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <path
+                  key={i}
+                  d={`M-20 ${60 + i * 26} C 80 ${20 + i * 30}, 160 ${110 + i * 22}, 240 ${60 + i * 26} S 380 ${30 + i * 28}, 440 ${80 + i * 22}`}
+                />
+              ))}
+            </svg>
+            <span className="project-card__icon">
+              <Icon name={project.icon} size={featured ? 56 : 40} strokeWidth={1.4} />
+            </span>
+          </>
+        )}
         <span className={`project-card__status ${project.status === "Ongoing" ? "is-live" : ""}`}>{project.status}</span>
       </div>
       <div className="project-card__body">

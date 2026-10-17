@@ -7,6 +7,8 @@ import PageHero from "../../components/PageHero";
 import Reveal from "../../components/Reveal";
 import { contactInfo, personas, services } from "../../data/siteContent";
 import usePersona from "../../hooks/usePersona";
+import { ApiError } from "../../services/apiHelpers";
+import { createContactSubmission } from "../../services/apiService";
 import { contactSchema } from "./schema/contactSchema";
 import type { ContactFormValues } from "./schema/contactSchema";
 import "./Contact.css";
@@ -25,6 +27,8 @@ const Contact = () => {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: yupResolver(contactSchema),
@@ -42,9 +46,23 @@ const Contact = () => {
   });
 
   const onSubmit = async (values: ContactFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setSubmitted(values.name.split(" ")[0]);
-    reset();
+    clearErrors("root.server");
+    try {
+      await createContactSubmission(values);
+      setSubmitted(values.name.split(" ")[0]);
+      reset();
+    } catch (error) {
+      if (error instanceof ApiError) {
+        error.details.forEach((detail) => {
+          if (Object.hasOwn(contactSchema.fields, detail.field)) {
+            setError(detail.field as keyof ContactFormValues, { type: "server", message: detail.message });
+          }
+        });
+      }
+      setError("root.server", {
+        message: error instanceof Error ? error.message : "Could not send your message. Please try again.",
+      });
+    }
   };
 
   return (
@@ -115,7 +133,7 @@ const Contact = () => {
                 </button>
               </div>
             ) : (
-              <form className="contact-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+              <form className="contact-form" onSubmit={handleSubmit(onSubmit)} aria-busy={isSubmitting} noValidate>
                 <div className="contact-form__head">
                   <h2 className="display-md">Send us a message</h2>
                   <p>Fields marked * are required.</p>
@@ -188,6 +206,10 @@ const Contact = () => {
                   <label htmlFor="consent">I agree to be contacted by Bibsikha regarding my enquiry.</label>
                 </div>
                 {errors.consent && <span className="form-error">{errors.consent.message}</span>}
+
+                {errors.root?.server?.message && (
+                  <p className="contact-form__error" role="alert">{errors.root.server.message}</p>
+                )}
 
                 <button type="submit" className="btn btn--gold contact-form__submit" disabled={isSubmitting}>
                   {isSubmitting ? "Sending…" : "Send message"}

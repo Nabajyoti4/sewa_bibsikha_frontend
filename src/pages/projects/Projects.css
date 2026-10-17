@@ -303,3 +303,8 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.grid-3.is-loading {
+  opacity: 0.6;
+  transition: opacity 0.2s var(--ease);
+}
