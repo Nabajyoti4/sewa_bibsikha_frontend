@@ -3,11 +3,15 @@ import type { CSSProperties } from "react";
 import CountUp from "../../components/CountUp";
 import Icon from "../../components/Icon";
 import PageHero from "../../components/PageHero";
+import Pagination from "../../components/Pagination";
 import ProjectCard from "../../components/ProjectCard";
 import Reveal from "../../components/Reveal";
 import SectionHeading from "../../components/SectionHeading";
 import { categoryLabels, cookingFacts, impactStats, projects, serviceCategories } from "../../data/siteContent";
 import type { ServiceCategory } from "../../data/siteContent";
+import useApiQuery from "../../hooks/useApiQuery";
+import { listPublicProjects } from "../../services/apiService";
+import { toProjectCard } from "../../utils/projectMapper";
 import "./Projects.css";
 
 const caseStudy = projects[0];
@@ -29,7 +33,11 @@ const caseStudyStages = [
 
 const Projects = () => {
   const [category, setCategory] = useState<ServiceCategory | "all">("all");
-  const visible = projects.filter((project) => category === "all" || project.category === category);
+  const [page, setPage] = useState(1);
+  const { data, error, loading } = useApiQuery(`${category}|${page}`, () =>
+    listPublicProjects({ page, category: category === "all" ? undefined : category }),
+  );
+  const visible = data?.data.map(toProjectCard) ?? [];
 
   return (
     <>
@@ -133,15 +141,28 @@ const Projects = () => {
                 role="tab"
                 aria-selected={category === item.id}
                 className={`chip ${category === item.id ? "is-active" : ""}`}
-                onClick={() => setCategory(item.id)}
+                onClick={() => {
+                  setCategory(item.id);
+                  setPage(1);
+                }}
               >
                 {item.id === "all" ? "All programmes" : item.label}
               </button>
             ))}
           </div>
 
-          {visible.length ? (
-            <div className="grid-3" key={category}>
+          {error ? (
+            <div className="projects-empty" role="alert">
+              <Icon name="leaf" size={40} />
+              <p>We couldn’t load our programmes right now. Please try again shortly.</p>
+            </div>
+          ) : !data ? (
+            <div className="projects-empty" role="status">
+              <Icon name="leaf" size={40} />
+              <p>Loading programmes…</p>
+            </div>
+          ) : visible.length ? (
+            <div className={`grid-3 ${loading ? "is-loading" : ""}`} key={`${category}-${data.pagination.page}`}>
               {visible.map((project, index) => (
                 <Reveal key={project.id} delay={(index % 3) * 90}>
                   <ProjectCard project={project} />
@@ -154,6 +175,13 @@ const Projects = () => {
               <p>No programmes in this category yet — new work is always growing.</p>
             </div>
           )}
+
+          <Pagination
+            page={page}
+            totalPages={data?.pagination.totalPages ?? 0}
+            onPageChange={setPage}
+            disabled={loading}
+          />
         </div>
       </section>
 

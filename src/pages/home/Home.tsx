@@ -18,14 +18,15 @@ import {
   cookingFacts,
   coreCompetencies,
   dimensions,
-  heroSlides,
   impactStats,
   personas,
   projects,
   strengths,
 } from "../../data/siteContent";
 import type { ServiceCategory } from "../../data/siteContent";
+import useApiQuery from "../../hooks/useApiQuery";
 import usePersona from "../../hooks/usePersona";
+import { getHeroSlides } from "../../services/apiService";
 import { getPersona, hasSignals, rankServices } from "../../utils/personalization";
 import "./Home.css";
 
@@ -36,6 +37,7 @@ const splitHeadline = (headline: string) => {
 
 const Home = () => {
   const { persona, setPersona, interests } = usePersona();
+  const { data: heroSlides } = useApiQuery("hero-slides", getHeroSlides);
   const activePersona = getPersona(persona);
   const { lead, tail } = splitHeadline(activePersona.headline);
   const recommended = rankServices(persona, interests).slice(0, 3);
@@ -108,7 +110,7 @@ const Home = () => {
           </div>
 
           <Reveal variant="zoom" delay={150} className="hero__visual">
-            <HeroCarousel slides={heroSlides} />
+            {heroSlides && heroSlides.length > 0 && <HeroCarousel slides={heroSlides} />}
           </Reveal>
         </div>
 

@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import PersonaProvider from "./context/PersonaProvider";
 import AdminLayout from "./layouts/admin/AdminLayout";
+import AdminPanelLayout from "./layouts/admin/AdminPanelLayout";
 import SiteLayout from "./layouts/site/SiteLayout";
 
 const Home = lazy(() => import("./pages/home/Home"));
@@ -15,6 +16,11 @@ const Contact = lazy(() => import("./pages/contact/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const AdminLogin = lazy(() => import("./pages/admin/login/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/admin/dashboard/AdminDashboard"));
+const AdminProjects = lazy(() => import("./pages/admin/projects/list/AdminProjects"));
+const ProjectForm = lazy(() => import("./pages/admin/projects/form/ProjectForm"));
+const AdminHeroSlides = lazy(() => import("./pages/admin/heroSlides/list/AdminHeroSlides"));
+const HeroSlideForm = lazy(() => import("./pages/admin/heroSlides/form/HeroSlideForm"));
+const AdminContacts = lazy(() => import("./pages/admin/contacts/list/AdminContacts"));
 
 const App = () => {
   return (
@@ -36,7 +42,16 @@ const App = () => {
               <Route path="login" element={<AdminLogin />} />
             </Route>
             <Route element={<ProtectedRoute />}>
-              <Route index element={<AdminDashboard />} />
+              <Route element={<AdminPanelLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="projects" element={<AdminProjects />} />
+                <Route path="projects/new" element={<ProjectForm key="new" />} />
+                <Route path="projects/:projectId/edit" element={<ProjectForm />} />
+                <Route path="hero-slides" element={<AdminHeroSlides />} />
+                <Route path="hero-slides/new" element={<HeroSlideForm key="new" />} />
+                <Route path="hero-slides/:slideId/edit" element={<HeroSlideForm />} />
+                <Route path="contacts" element={<AdminContacts />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

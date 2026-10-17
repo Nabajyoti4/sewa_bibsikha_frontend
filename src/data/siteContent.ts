@@ -1,5 +1,4 @@
 import type { IconName } from "../components/Icon";
-
 export type PersonaId = "government" | "industry" | "community" | "explorer";
 
 export type ServiceCategory = "carbon" | "energy" | "consultancy" | "operations";
@@ -34,6 +33,7 @@ export interface Project {
   metrics?: { value: string; label: string }[];
   palette: [string, string];
   icon: IconName;
+  image?: string;
 }
 
 export interface ApproachStep {
@@ -67,67 +67,6 @@ export const contactInfo = {
   addressLines: ["Khongia Gaon,", "Near Borkhongia High School,", "Jorhat - 785616 (Assam)"],
   address: "Khongia Gaon, Near Borkhongia High School, Jorhat - 785616 (Assam)",
 };
-
-export interface HeroSlide {
-  id: string;
-  title: string;
-  caption: string;
-  tag: string;
-  icon: IconName;
-  palette: [string, string];
-  image?: string;
-}
-
-export const heroSlides: HeroSlide[] = [
-  {
-    id: "clean-cooking",
-    title: "Clean Cooking Programme",
-    caption: "Smokeless cook stoves for 3,00,000+ rural households.",
-    tag: "Clean Energy",
-    icon: "flame",
-    palette: ["#0f5132", "#2fa36f"],
-  },
-  {
-    id: "solar-lighting",
-    title: "Solar Lanterns & Street Lights",
-    caption: "Bringing clean light to rural communities.",
-    tag: "Renewable Energy",
-    icon: "sun",
-    palette: ["#b8860b", "#e8b931"],
-  },
-  {
-    id: "carbon-credits",
-    title: "Carbon Credit Management",
-    caption: "Turning climate action into business returns.",
-    tag: "Carbon & SDG",
-    icon: "coins",
-    palette: ["#13294b", "#1f4b8f"],
-  },
-  {
-    id: "field-teams",
-    title: "Skilled Field Teams",
-    caption: "350–600 project personnel on the ground.",
-    tag: "Manpower",
-    icon: "users",
-    palette: ["#0b3d2e", "#146c43"],
-  },
-  {
-    id: "nature",
-    title: "Nature Based Solutions",
-    caption: "Conserving natural resources and ecosystems.",
-    tag: "Ecosystem",
-    icon: "leaf",
-    palette: ["#146c43", "#5bbf8a"],
-  },
-  {
-    id: "distribution",
-    title: "Clean-Energy Distribution",
-    caption: "Supply chain for products of environmental importance.",
-    tag: "Logistics",
-    icon: "truck",
-    palette: ["#0f5132", "#b8860b"],
-  },
-];
 
 export const businessQuestions = [
   "How to grow your business by being climate-conscious?",
