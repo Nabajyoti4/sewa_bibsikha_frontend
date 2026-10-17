@@ -1,0 +1,53 @@
+.admin {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--header-h);
+}
+
+.admin-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-topbar__meta {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 1.3;
+}
+
+.admin-topbar__meta strong {
+  color: var(--green-900);
+}
+
+.admin-topbar__meta span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.admin-topbar .btn {
+  height: 44px;
+  padding: 0 20px;
+}
+
+@media (max-width: 640px) {
+  .admin-topbar__meta {
+    display: none;
+  }
+}
