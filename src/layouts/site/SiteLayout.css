@@ -186,12 +186,19 @@
   background: var(--cream);
   opacity: 0;
   visibility: hidden;
+  overflow-y: auto;
   transform: translateY(-12px);
   transition: all 0.4s var(--ease);
 }
 
+.site-header.is-scrolled .mobile-menu {
+  top: 66px;
+}
+
+/* backdrop-filter makes the header the containing block for the fixed menu */
 .site-header.is-open {
   background: var(--cream);
+  backdrop-filter: none;
 }
 
 .site-header.is-open .mobile-menu {
